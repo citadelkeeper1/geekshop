@@ -1,0 +1,21 @@
+{% extends 'adminapp/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-7">
+    <p>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ update_form|crispy }}
+      <button type="submit" class="btn btn-outline-primary btn-block">Сохранить</button>
+    </form>
+    </p>
+    <p>
+      <a href="{% url 'admin:products' category.pk %}" class="btn btn-outline-secondary btn-block" role="button"
+        aria-pressed="true">К списку продуктов</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
