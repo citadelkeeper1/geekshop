@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "pzegz3ade%pvc00#@7bxcz9mt8tv(^l!5a9iks0t_@)ra#&om$"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "basketapp",
     "adminapp",
     "social_django",
+    "ordersapp",
 ]
 
 # Django Crispy Forms
@@ -69,6 +70,7 @@ TEMPLATES = [
                 "mainapp.context_processors.basket",
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
+                "django.template.context_processors.media",
             ],
         },
     },
@@ -80,10 +82,18 @@ WSGI_APPLICATION = "geekshop.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# Change database to PostgreSQL
 DATABASES = {
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    # }
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": "geekshop",
+        "ENGINE": "django.db.backends.postgresql",
+        "USER": "django",
+        "PASSWORD": "geekbrains",
+        "HOST": "localhost",
     }
 }
 
@@ -130,7 +140,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+# In common case STATIC_ROOT can not be in STATICFILES_DIRS
+if DEBUG:
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files
 MEDIA_URL = "/media/"
@@ -168,6 +182,7 @@ EMAIL_FILE_PATH = "tmp/email-messages/"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "social_core.backends.vk.VKOAuth2",
+    "social_core.backends.github.GithubOAuth2",
 )
 
 # SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ("social_core.backends.vk.VKOAuth2",)
@@ -177,12 +192,19 @@ SOCIAL_AUTH_URL_NAMESPACE = "social"
 # SOCIAL_AUTH_VK_OAUTH2_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 # SOCIAL_AUTH_VK_OAUTH2_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
-# Load settings from file
+# Load settings from file for Vk
 with open(".secrets/vk.json", "r") as f:
     VK = json.load(f)
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
 SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
+
+# Load settings from file for GitHub
+with open(".secrets/github.json", "r") as f:
+    github_secrets = json.load(f)
+
+SOCIAL_AUTH_GITHUB_KEY = github_secrets["SOCIAL_AUTH_GITHUB_KEY"]
+SOCIAL_AUTH_GITHUB_SECRET = github_secrets["SOCIAL_AUTH_GITHUB_SECRET"]
 
 LOGIN_ERROR_URL = "/"
 
