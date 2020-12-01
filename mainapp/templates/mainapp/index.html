@@ -49,19 +49,22 @@
 
 <div class="clr"></div>
 
-{% comment %}
 <div style="display: none;">
     <ul>
+        {% comment %}
         <li>{{ fact.get_factorial }}</li>
         <li>{{ fact.get_factorial }}</li>
         <li>{{ fact.get_factorial }}</li>
-
+        <li>{{ fact.get_factorial }}</li>
+        
         {% with temp_fact=fact.get_factorial %}
         <li>{{ temp_fact }}</li>
         <li>{{ temp_fact }}</li>
         <li>{{ temp_fact }}</li>
+        <li>{{ temp_fact }}</li>
         {% endwith %}
+        
+        {% endcomment %}
     </ul>
 </div>
-{% endcomment %}
 {% endblock %}

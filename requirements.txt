@@ -23,8 +23,6 @@ pathspec==0.8.0
 Pillow==7.2.0
 psycopg2-binary==2.8.6
 pycparser==2.20
-pydotplus==2.0.2
-pygraphviz==1.6
 PyJWT==1.7.1
 pylint==2.6.0
 pylint-django==2.3.0
